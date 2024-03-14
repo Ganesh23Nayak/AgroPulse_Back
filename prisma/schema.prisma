@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+  LABOUR
+  CUSTOMER
+}
+
+model User {
+  userId    Int      @id @default(autoincrement())
+  name      String
+  password  String
+  email     String   @unique
+  role      Role     @default(USER)
+  phone     String?
+  clients   Clients?
+  labour    Labour?
+  admin     Admin?
+  createdAt DateTime @default(now())
+}
+
+// Define the Customer model
+model Clients {
+  customerId Int  @id @default(autoincrement())
+  user       User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int  @unique
+  // plans      Plan[]
+}
+
+// Define the Plan model
+// model Plan {
+//   planId      Int       @id @default(autoincrement())
+//   customer    Customer? @relation(fields: [customerId], references: [customerId],onDelete: Cascade,onUpdate: Cascade)
+//   customerId  Int?
+//   // Add your plan attributes here
+// }
+
+// Define the Labour model
+model Labour {
+  labourId Int  @id @default(autoincrement())
+  user     User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId   Int  @unique
+  Ratings  Int
+  // Add your labour attributes here
+}
+
+//Define the admin model
+model Admin {
+  adminId Int  @id @default(autoincrement())
+  user    User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId  Int  @unique
+  // Add your admin attributes here
+}
+
+// npx prisma generate
+// npx prisma migrate dev --name init --create-only
+// npx prisma migrate deploy
