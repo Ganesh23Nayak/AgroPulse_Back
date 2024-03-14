@@ -17,6 +17,12 @@ enum Role {
   CUSTOMER
 }
 
+enum props {
+  tactors
+  planters
+  harvester
+}
+
 model User {
   userId    Int      @id @default(autoincrement())
   name      String
@@ -24,14 +30,14 @@ model User {
   email     String   @unique
   role      Role     @default(USER)
   phone     String?
-  clients   Clients?
+  clients   clients?
   labour    Labour?
   admin     Admin?
   createdAt DateTime @default(now())
 }
 
 // Define the Customer model
-model Clients {
+model clients {
   customerId Int  @id @default(autoincrement())
   user       User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   userId     Int  @unique
@@ -48,11 +54,21 @@ model Clients {
 
 // Define the Labour model
 model Labour {
-  labourId Int  @id @default(autoincrement())
-  user     User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId   Int  @unique
-  Ratings  Int
+  labourId  Int   @id @default(autoincrement())
+  user      User  @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int   @unique
+  ratings   Int
+  equipment props
+  rate      Int
   // Add your labour attributes here
+}
+
+model Contactus {
+  contactId Int    @id @default(autoincrement())
+  name      String
+  email     String
+  phone     Int
+  msg       String
 }
 
 //Define the admin model
