@@ -17,6 +17,18 @@ enum Role {
   CUSTOMER
 }
 
+enum Status {
+  BANNED
+  ACTIVE
+  INACTIVE
+}
+
+enum props {
+  tactors
+  planters
+  harvester
+}
+
 model User {
   userId    Int      @id @default(autoincrement())
   name      String
@@ -24,17 +36,21 @@ model User {
   email     String   @unique
   role      Role     @default(USER)
   phone     String?
-  clients   Clients?
+  clients   clients?
   labour    Labour?
   admin     Admin?
   createdAt DateTime @default(now())
 }
 
 // Define the Customer model
-model Clients {
-  customerId Int  @id @default(autoincrement())
-  user       User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId     Int  @unique
+model clients {
+  customerId Int    @id @default(autoincrement())
+  user       User   @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int    @unique
+  landsize   Int
+  address    String
+  // Add your customer attributes here
+
   // plans      Plan[]
 }
 
@@ -48,11 +64,34 @@ model Clients {
 
 // Define the Labour model
 model Labour {
-  labourId Int  @id @default(autoincrement())
-  user     User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId   Int  @unique
-  Ratings  Int
+  labourId  Int             @id @default(autoincrement())
+  user      User            @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int             @unique
+  ratings   Int
+  equipment props
+  rate      Float
+  status    Status
+  history   LabourHistory[]
+
   // Add your labour attributes here
+}
+
+model LabourHistory {
+  id        Int      @id @default(autoincrement())
+  labour    Labour   @relation(fields: [labourId], references: [labourId])
+  labourId  Int
+  rating    Int
+  createdAt DateTime @default(now())
+
+  // Add other attributes related to history if needed
+}
+
+model Contactus {
+  contactId Int    @id @default(autoincrement())
+  name      String
+  email     String
+  phone     Int
+  msg       String
 }
 
 //Define the admin model

@@ -19,14 +19,17 @@ router.post('/addnew', async (req, res) => {
                 },
             });
             // console.log(newUser);
-            newRole = await prisma.customer.create({
+            newRole = await prisma.clients.create({
                 data: {
-                    userId:newUser.userId
+                    userId:newUser.userId,
+                    landsize:data.landsize,
+                    address:data.address
+
                 },
             });
-            // console.log(newRole);
+            console.log(newRole);
         } else if (data.role === 'LABOUR') {
-            newUser = await prisma.user.create({
+            newUser = await prisma.User.create({
                 data: {
                     name: data.name,
                     email: data.email,
@@ -38,7 +41,12 @@ router.post('/addnew', async (req, res) => {
             //  console.log(newUser);
             newRole = await prisma.labour.create({
                 data: {
-                    userId: newUser.userId
+                    userId: newUser.userId,
+                    equipment: data.equipment,
+                    ratings:0,
+                    rate:data.rate
+
+                    
                 }
             });
             // console.log("User created")
@@ -103,6 +111,57 @@ router.post('/login', async (req, res) => {
     })
 
 
+//contact 
+router.post('/contact',async(req,res)=>{
+    try {
+        const data = req.body;
+        console.log(data.name);
+        console.log(data.email);
+        console.log(data.phone);
+        console.log(data.message);
+        const mes = await prisma.contactus.create({
+            data: {
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                msg: data.msg,
+            },
+        });
+        res.status(200).json({ message: 'got it thanks', });
+        console.log(mes);
+}
+ catch (error) {
+        console.error('Error adding user:', error);
+        res.status(500).json({ error: 'Error adding user' });
+    }
+});
+
+router.post('/contactus', async (req, res) => {
+    try {
+        const data = req.body;
+        console.log(data);
+        let newUser;
+
+            newUser = await prisma.contactus.create({
+                data: {
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone,
+                    msg: data.msg,
+                },
+            });
+           
+            // console.log(newRole);
+        
+        console.log("got it:", newUser);
+        res.status(200).json({ message: 'got it', user: newUser });
+    } catch (error) {
+        console.error('Error adding user:', error);
+        res.status(500).json({ error: 'Error adding user' });
+    }
+});
+
+
 //example to delete the data can do similar but i used params  http://localhost:3000/delete/ganesh@gmail.com
 router.delete('/delete/:email', async (req, res) => {
     try {
@@ -119,6 +178,8 @@ router.delete('/delete/:email', async (req, res) => {
         res.status(500).json({ error: 'Error deleting user' });
     }
 });
+
+
 
 
 //update the user
