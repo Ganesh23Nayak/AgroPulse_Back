@@ -42,9 +42,10 @@ router.post('/addnew', async (req, res) => {
             newRole = await prisma.labour.create({
                 data: {
                     userId: newUser.userId,
-                    ratings: data.ratings,
-                    rate: data.rate,
-                    equipment: data.equipment
+                    equipment: data.equipment,
+                    ratings:0,
+                    rate:data.rate
+
                     
                 }
             });
@@ -177,6 +178,8 @@ router.delete('/delete/:email', async (req, res) => {
         res.status(500).json({ error: 'Error deleting user' });
     }
 });
+
+
 
 
 //update the user

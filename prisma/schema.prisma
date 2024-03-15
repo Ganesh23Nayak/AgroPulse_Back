@@ -17,6 +17,12 @@ enum Role {
   CUSTOMER
 }
 
+enum Status {
+  BANNED
+  ACTIVE
+  INACTIVE
+}
+
 enum props {
   tactors
   planters
@@ -63,7 +69,8 @@ model Labour {
   userId    Int             @unique
   ratings   Int
   equipment props
-  rate      Int
+  rate      Float
+  status    Status
   history   LabourHistory[]
 
   // Add your labour attributes here
