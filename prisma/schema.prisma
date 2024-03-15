@@ -68,7 +68,7 @@ model Labour {
   user      User            @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   userId    Int             @unique
   ratings   Int
-  equipment props
+  equipment props           
   rate      Float
   status    Status
   history   LabourHistory[]

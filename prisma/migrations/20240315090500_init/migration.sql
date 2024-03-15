@@ -2,6 +2,9 @@
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'LABOUR', 'CUSTOMER');
 
 -- CreateEnum
+CREATE TYPE "Status" AS ENUM ('BANNED', 'ACTIVE', 'INACTIVE');
+
+-- CreateEnum
 CREATE TYPE "props" AS ENUM ('tactors', 'planters', 'harvester');
 
 -- CreateTable
@@ -21,6 +24,8 @@ CREATE TABLE "User" (
 CREATE TABLE "clients" (
     "customerId" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
+    "landsize" INTEGER NOT NULL,
+    "address" TEXT NOT NULL,
 
     CONSTRAINT "clients_pkey" PRIMARY KEY ("customerId")
 );
@@ -30,10 +35,32 @@ CREATE TABLE "Labour" (
     "labourId" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "ratings" INTEGER NOT NULL,
-    "equipment" "props" NOT NULL,
-    "rate" INTEGER NOT NULL,
+    "equipment" "props",
+    "rate" DOUBLE PRECISION NOT NULL,
+    "status" "Status" NOT NULL,
 
     CONSTRAINT "Labour_pkey" PRIMARY KEY ("labourId")
+);
+
+-- CreateTable
+CREATE TABLE "LabourHistory" (
+    "id" SERIAL NOT NULL,
+    "labourId" INTEGER NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "LabourHistory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Contactus" (
+    "contactId" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone" INTEGER NOT NULL,
+    "msg" TEXT NOT NULL,
+
+    CONSTRAINT "Contactus_pkey" PRIMARY KEY ("contactId")
 );
 
 -- CreateTable
@@ -61,6 +88,9 @@ ALTER TABLE "clients" ADD CONSTRAINT "clients_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Labour" ADD CONSTRAINT "Labour_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LabourHistory" ADD CONSTRAINT "LabourHistory_labourId_fkey" FOREIGN KEY ("labourId") REFERENCES "Labour"("labourId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Admin" ADD CONSTRAINT "Admin_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;

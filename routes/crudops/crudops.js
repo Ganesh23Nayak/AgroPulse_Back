@@ -44,8 +44,8 @@ router.post('/addnew', async (req, res) => {
                     userId: newUser.userId,
                     equipment: data.equipment,
                     ratings:0,
-                    rate:data.rate
-
+                    rate:data.rate,
+                    status: "ACTIVE"
                     
                 }
             });
@@ -89,7 +89,8 @@ router.post('/addnew', async (req, res) => {
 // login
 router.post('/login', async (req, res) => {
     try {
-        const receivedData = req.body;
+        let receivedData = req.body;
+        receivedData.ratings=0;
         console.log(receivedData)
         const user = await prisma.user.findUnique({
           where: {
