@@ -38,9 +38,13 @@ model User {
 
 // Define the Customer model
 model clients {
-  customerId Int  @id @default(autoincrement())
-  user       User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId     Int  @unique
+  customerId Int    @id @default(autoincrement())
+  user       User   @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int    @unique
+  landsize   Int
+  address    String
+  // Add your customer attributes here
+
   // plans      Plan[]
 }
 
@@ -54,13 +58,25 @@ model clients {
 
 // Define the Labour model
 model Labour {
-  labourId  Int   @id @default(autoincrement())
-  user      User  @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId    Int   @unique
+  labourId  Int             @id @default(autoincrement())
+  user      User            @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int             @unique
   ratings   Int
   equipment props
   rate      Int
+  history   LabourHistory[]
+
   // Add your labour attributes here
+}
+
+model LabourHistory {
+  id        Int      @id @default(autoincrement())
+  labour    Labour   @relation(fields: [labourId], references: [labourId])
+  labourId  Int
+  rating    Int
+  createdAt DateTime @default(now())
+
+  // Add other attributes related to history if needed
 }
 
 model Contactus {

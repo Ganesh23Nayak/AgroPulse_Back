@@ -21,10 +21,13 @@ router.post('/addnew', async (req, res) => {
             // console.log(newUser);
             newRole = await prisma.clients.create({
                 data: {
-                    userId:newUser.userId
+                    userId:newUser.userId,
+                    landsize:data.landsize,
+                    address:data.address
+
                 },
             });
-            // console.log(newRole);
+            console.log(newRole);
         } else if (data.role === 'LABOUR') {
             newUser = await prisma.User.create({
                 data: {
