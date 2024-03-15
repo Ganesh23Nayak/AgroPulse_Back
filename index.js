@@ -27,5 +27,6 @@ app.listen(port, () => {
 // 	"email":"manesh@gmail.com"
 // }
 
-app.use('/api/auth', require('../routes/authorization/authlogics'));
+app.use('/api/auth', require('./routes/crudops/crudops'));
+app.use('/api/data', require('./routes/getdetails/getdetails'));
 
