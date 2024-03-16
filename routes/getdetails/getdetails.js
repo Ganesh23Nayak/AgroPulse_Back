@@ -12,4 +12,29 @@ router.get('/getdetails', async (req, res) => {
     }
 })
 
+
+
+router.get('/getlabour', async (req, res) => {
+    try {
+        const labour = await prisma.labour.findMany({
+            include: {
+                user: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });  
+        console.log("first")
+        res.status(200).json({data:labour});
+    } catch (error) {
+        console.error('Error fetching labour:', error);
+        res.status(500).json({ error: 'Error fetching labour' });
+    }
+});
+
+
+
+
+
 module.exports = router;

@@ -35,7 +35,7 @@ CREATE TABLE "Labour" (
     "labourId" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "ratings" INTEGER NOT NULL,
-    "equipment" "props",
+    "equipment" "props" NOT NULL,
     "rate" DOUBLE PRECISION NOT NULL,
     "status" "Status" NOT NULL,
 
